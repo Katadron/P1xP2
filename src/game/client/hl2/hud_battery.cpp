@@ -47,14 +47,15 @@ private:
 };
 
 DECLARE_HUDELEMENT( CHudBattery );
-DECLARE_HUD_MESSAGE( CHudBattery, Battery );
+
+DECLARE_HUD_MESSAGE(CHudBattery, Battery);
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor
 //-----------------------------------------------------------------------------
 CHudBattery::CHudBattery( const char *pElementName ) : BaseClass(NULL, "HudSuit"), CHudElement( pElementName )
 {
-	SetHiddenBits( HIDEHUD_HEALTH | HIDEHUD_NEEDSUIT );
+	SetHiddenBits( HIDEHUD_ALL );
 }
 
 //-----------------------------------------------------------------------------

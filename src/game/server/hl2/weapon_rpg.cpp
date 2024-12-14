@@ -1651,6 +1651,7 @@ void CWeaponRPG::PrimaryAttack( void )
 		}
 	}
 
+#ifndef PORTAL_DLL
 	if( hl2_episodic.GetBool() )
 	{
 		CAI_BaseNPC **ppAIs = g_AI_Manager.AccessAIs();
@@ -1666,6 +1667,7 @@ void CWeaponRPG::PrimaryAttack( void )
 			}
 		}
 	}
+#endif
 }
 
 //-----------------------------------------------------------------------------

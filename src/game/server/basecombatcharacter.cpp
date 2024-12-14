@@ -57,7 +57,8 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 extern int	g_interactionBarnacleVictimReleased;
 #endif //HL2_DLL
 
@@ -228,7 +229,11 @@ int	CBaseCombatCharacter::GetInteractionID(void)
 // ============================================================================
 bool CBaseCombatCharacter::HasHumanGibs( void )
 {
-#if defined( HL2_DLL )
+#ifdef PORTAL_DLL
+	if (Classify() == CLASS_PLAYER)
+		return true;
+
+#elif defined(HL2_DLL)
 	Class_T myClass = Classify();
 	if ( myClass == CLASS_CITIZEN_PASSIVE   ||
 		 myClass == CLASS_CITIZEN_REBEL		||
@@ -263,7 +268,8 @@ bool CBaseCombatCharacter::HasHumanGibs( void )
 
 bool CBaseCombatCharacter::HasAlienGibs( void )
 {
-#if defined( HL2_DLL )
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 	Class_T myClass = Classify();
 	if ( myClass == CLASS_BARNACLE		 || 
 		 myClass == CLASS_STALKER		 ||
@@ -691,7 +697,8 @@ bool CBaseCombatCharacter::FInAimCone( const Vector &vecSpot )
 //-----------------------------------------------------------------------------
 bool CBaseCombatCharacter::HandleInteraction( int interactionType, void *data, CBaseCombatCharacter* sourceEnt )
 {
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 	if ( interactionType == g_interactionBarnacleVictimReleased )
 	{
 		// For now, throw away the NPC and leave the ragdoll.
@@ -1548,7 +1555,11 @@ bool CBaseCombatCharacter::BecomeRagdoll( const CTakeDamageInfo &info, const Vec
 #endif // !HL2MP
 
 	// Mega physgun requires everything to be a server-side ragdoll
+#ifdef PORTAL_DLL
+	if ( m_bForceServerRagdoll == true || ( ( bMegaPhyscannonActive == true ) && !IsPlayer() && Classify() != CLASS_PLAYER_ALLY ) )
+#else
 	if ( m_bForceServerRagdoll == true || ( ( bMegaPhyscannonActive == true ) && !IsPlayer() && Classify() != CLASS_PLAYER_ALLY_VITAL && Classify() != CLASS_PLAYER_ALLY ) )
+#endif
 	{
 		if ( CanBecomeServerRagdoll() == false )
 			return false;
@@ -1562,7 +1573,11 @@ bool CBaseCombatCharacter::BecomeRagdoll( const CTakeDamageInfo &info, const Vec
 		return true;
 	}
 
+#ifdef PORTAL_DLL
+	if (hl2_episodic.GetBool())
+#else
 	if( hl2_episodic.GetBool() && Classify() == CLASS_PLAYER_ALLY_VITAL )
+#endif
 	{
 		CreateServerRagdoll( this, m_nForceBone, newinfo, COLLISION_GROUP_INTERACTIVE_DEBRIS, true );
 		RemoveDeferred();
@@ -2837,7 +2852,8 @@ CBaseEntity *CBaseCombatCharacter::Weapon_FindUsable( const Vector &range )
 {
 	bool bConservative = false;
 
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 	if( hl2_episodic.GetBool() && !GetActiveWeapon() )
 	{
 		// Unarmed citizens are conservative in their weapon finding
@@ -3038,7 +3054,8 @@ float CBaseCombatCharacter::CalculatePhysicsStressDamage( vphysics_objectstress_
 
 void CBaseCombatCharacter::ApplyStressDamage( IPhysicsObject *pPhysics, bool bRequireLargeObject )
 {
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 	if( Classify() == CLASS_PLAYER_ALLY || Classify() == CLASS_PLAYER_ALLY_VITAL )
 	{
 		// Bypass stress completely for allies and vitals.

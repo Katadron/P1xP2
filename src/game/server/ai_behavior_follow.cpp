@@ -1392,7 +1392,7 @@ void CAI_FollowBehavior::StartTask( const Task_t *pTask )
 
 					bool bIsEpisodicVitalAlly;
 					
-#ifdef HL2_DLL
+#if defined(HL2_DLL) && !defined(PORTAL_DLL)
 					bIsEpisodicVitalAlly = (hl2_episodic.GetBool() && GetOuter()->Classify() == CLASS_PLAYER_ALLY_VITAL);
 #else
 					bIsEpisodicVitalAlly = false;
@@ -1940,14 +1940,13 @@ void CAI_FollowBehavior::BuildScheduleTestBits()
 		   IsCurSchedule(SCHED_ALERT_STAND) ) ||
 		   IsCurSchedule(SCHED_ALERT_FACE_BESTSOUND ) )
 	{
-#ifdef HL2_EPISODIC
-		if( IsCurSchedule(SCHED_RELOAD, false) && GetOuter()->Classify() == CLASS_PLAYER_ALLY_VITAL )
+
+		if( IsCurSchedule(SCHED_RELOAD, false) )
 		{
 			// Alyx and Barney do not stop reloading because the player has moved. 
 			// Citizens and other regular allies do.
 			bIgnoreMovedMark = true;
 		}
-#endif//HL2_EPISODIC
 
 		if( !bIgnoreMovedMark )
 		{
@@ -1966,7 +1965,7 @@ void CAI_FollowBehavior::BuildScheduleTestBits()
 			GetOuter()->SetCustomInterruptCondition( COND_CAN_RANGE_ATTACK1 );
 		}
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 		// In Alyx darkness mode, break on the player turning their flashlight off
 		if ( HL2GameRules()->IsAlyxInDarknessMode() )
 		{

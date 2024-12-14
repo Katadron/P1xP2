@@ -642,7 +642,8 @@ void CAI_BaseNPC::Ignite( float flFlameLifetime, bool bNPCOnly, float flSize, bo
 {
 	BaseClass::Ignite( flFlameLifetime, bNPCOnly, flSize, bCalledByLevelDesigner );
 
-#ifdef HL2_EPISODIC
+#ifdef PORTAL_DLL
+#elif defined(HL2_EPISODIC)
 	CBasePlayer *pPlayer = AI_GetSinglePlayer();
 	if ( pPlayer->IRelationType( this ) != D_LI )
 	{
@@ -11722,7 +11723,8 @@ void CAI_BaseNPC::CleanupScriptsOnTeleport( bool bEnrouteAsWell )
 //-----------------------------------------------------------------------------
 bool CAI_BaseNPC::HandleInteraction(int interactionType, void *data, CBaseCombatCharacter* sourceEnt)
 {
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 	if ( interactionType == g_interactionBarnacleVictimGrab )
 	{
 		// Make the victim stop thinking so they're as good as dead without 
@@ -12044,8 +12046,8 @@ bool CAI_BaseNPC::IsNavigationUrgent()
 
 bool CAI_BaseNPC::ShouldFailNav( bool bMovementFailed )
 {
-#ifdef HL2_EPISODIC
-
+#ifdef PORTAL_DLL
+#elif defined(HL2_EPISODIC)
 	if ( ai_vehicle_avoidance.GetBool() )
 	{
 		// Never be blocked this way by a vehicle (creates too many headaches around the levels)
@@ -12057,7 +12059,6 @@ bool CAI_BaseNPC::ShouldFailNav( bool bMovementFailed )
 				return false;
 		}
 	}
-
 #endif // HL2_EPISODIC
 
 	// It's up to the schedule that requested movement to deal with failed movement.  Currently, only a handfull of 

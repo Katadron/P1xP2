@@ -138,9 +138,11 @@ void CAI_AllyManager::CountAllies( int *pTotal, int *pMedics )
 	{
 		if ( ppAIs[i]->IsAlive() && ppAIs[i]->IsPlayerAlly() )
 		{
+#ifndef PORTAL_DLL
 			// Vital allies do not count.
 			if( ppAIs[i]->Classify() == CLASS_PLAYER_ALLY_VITAL )
 				continue;
+#endif
 
 			// They only count if I can use them.
 			if( ppAIs[i]->HasSpawnFlags(SF_CITIZEN_NOT_COMMANDABLE) )
@@ -157,6 +159,7 @@ void CAI_AllyManager::CountAllies( int *pTotal, int *pMedics )
 				  fabsf( ppAIs[i]->GetAbsOrigin().z - vPlayerPos.z ) > 192 ) )
 				continue;
 
+#ifndef PORTAL_DLL
 			if( FClassnameIs( ppAIs[i], "npc_citizen" ) ) 
 			{  
 				CNPC_Citizen *pCitizen = assert_cast<CNPC_Citizen *>(ppAIs[i]);
@@ -169,6 +172,7 @@ void CAI_AllyManager::CountAllies( int *pTotal, int *pMedics )
 				if ( ppAIs[i]->HasSpawnFlags( SF_CITIZEN_MEDIC ) )
 					(*pMedics)++;
 			}
+#endif
 
 			(*pTotal)++;
 		}

@@ -1,0 +1,1 @@
+"D:\Games\Steam\steamapps\common\Source SDK Base 2013 Singleplayer\hl2.exe" -game "D:\P1xP2\game\mod_portal" -dev -allowdebug -steam -windowed -noborder

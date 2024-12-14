@@ -59,7 +59,7 @@ private:
 
 using namespace vgui;
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 DECLARE_HUDELEMENT( CHudLocator );
 #endif 
 

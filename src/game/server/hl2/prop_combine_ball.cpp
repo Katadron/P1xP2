@@ -1231,7 +1231,11 @@ void CPropCombineBall::OnHitEntity( CBaseEntity *pHitEntity, float flSpeed, int 
 				{
 					EmitSound( "NPC_CombineBall.KillImpact" );
 
+#ifndef PORTAL_DLL
 					if ( pHitEntity->IsNPC() && pHitEntity->Classify() != CLASS_PLAYER_ALLY_VITAL && hl2_episodic.GetBool() == true )
+#else
+					if (pHitEntity->IsNPC() && hl2_episodic.GetBool() == true)
+#endif
 					{
 						if ( pHitEntity->Classify() != CLASS_PLAYER_ALLY || ( pHitEntity->Classify() == CLASS_PLAYER_ALLY && m_bStruckEntity == false ) )
 						{

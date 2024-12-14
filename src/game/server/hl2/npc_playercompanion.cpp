@@ -334,10 +334,12 @@ Disposition_t CNPC_PlayerCompanion::IRelationType( CBaseEntity *pTarget )
 //-----------------------------------------------------------------------------
 bool CNPC_PlayerCompanion::IsSilentSquadMember() const
 {
+#ifndef PORTAL_DLL
 	if ( (const_cast<CNPC_PlayerCompanion *>(this))->Classify() == CLASS_PLAYER_ALLY_VITAL && m_pSquad && MAKE_STRING(m_pSquad->GetName()) == GetPlayerSquadName() )
 	{
 		return true;
 	}
+#endif
 
 	return false;
 }
@@ -352,6 +354,7 @@ void CNPC_PlayerCompanion::GatherConditions()
 	{
 		CBasePlayer *pPlayer = UTIL_GetLocalPlayer();
 
+#ifndef PORTAL_DLL
 		if ( Classify() == CLASS_PLAYER_ALLY_VITAL )
 		{
 			bool bInPlayerSquad = ( m_pSquad && MAKE_STRING(m_pSquad->GetName()) == GetPlayerSquadName() );
@@ -381,6 +384,7 @@ void CNPC_PlayerCompanion::GatherConditions()
 				}
 			}
 		}
+#endif
 
 		m_flBoostSpeed = 0;
 
@@ -1295,6 +1299,7 @@ Activity CNPC_PlayerCompanion::TranslateActivityReadiness( Activity activity )
 	if ( m_ActBusyBehavior.IsActive() )
 		return activity;
 
+#ifndef PORTAL_DLL
 	if ( m_bReadinessCapable && 
 		 ( GetReadinessUse() == AIRU_ALWAYS || 
 		   ( GetReadinessUse() == AIRU_ONLY_PLAYER_SQUADMATES && (IsInPlayerSquad()||Classify()==CLASS_PLAYER_ALLY_VITAL) ) ) )
@@ -1347,6 +1352,7 @@ Activity CNPC_PlayerCompanion::TranslateActivityReadiness( Activity activity )
 			return actremap.mappedActivity;
 		}
 	}
+#endif
 
 	return activity;
 }
@@ -1384,7 +1390,7 @@ Activity CNPC_PlayerCompanion::NPC_TranslateActivity( Activity activity )
 //------------------------------------------------------------------------------
 void CNPC_PlayerCompanion::HandleAnimEvent( animevent_t *pEvent )
 {
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 	// Create a flare and parent to our hand
 	if ( pEvent->event == AE_COMPANION_PRODUCE_FLARE )
 	{
@@ -2317,10 +2323,12 @@ bool CNPC_PlayerCompanion::FCanCheckAttacks()
 #define CITIZEN_HEADSHOT_FREQUENCY	3 // one in this many shots at a zombie will be aimed at the zombie's head
 Vector CNPC_PlayerCompanion::GetActualShootPosition( const Vector &shootOrigin )
 {
+#if !defined(PORTAL_DLL)
 	if( GetEnemy() && GetEnemy()->Classify() == CLASS_ZOMBIE && random->RandomInt( 1, CITIZEN_HEADSHOT_FREQUENCY ) == 1 )
 	{
 		return GetEnemy()->HeadTarget( shootOrigin );
 	}
+#endif
 
 	return BaseClass::GetActualShootPosition( shootOrigin );
 }
@@ -2329,10 +2337,12 @@ Vector CNPC_PlayerCompanion::GetActualShootPosition( const Vector &shootOrigin )
 //------------------------------------------------------------------------------
 WeaponProficiency_t CNPC_PlayerCompanion::CalcWeaponProficiency( CBaseCombatWeapon *pWeapon )
 {
+#if !defined(PORTAL_DLL)
 	if( FClassnameIs( pWeapon, "weapon_ar2" ) )
 	{
 		return WEAPON_PROFICIENCY_VERY_GOOD;
 	}
+#endif
 
 	return WEAPON_PROFICIENCY_PERFECT;
 }
@@ -2461,6 +2471,7 @@ void CNPC_PlayerCompanion::SetupCoverSearch( CBaseEntity *pEntity )
 	gm_bFindingCoverFromAllEnemies = false;
 	g_pMultiCoverSearcher = this;
 
+#if !defined(PORTAL_DLL)
 	if ( Classify() == CLASS_PLAYER_ALLY_VITAL || IsInPlayerSquad() )
 	{
 		if ( GetEnemy() )
@@ -2498,6 +2509,7 @@ void CNPC_PlayerCompanion::SetupCoverSearch( CBaseEntity *pEntity )
 			}
 		}
 	}
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -2699,9 +2711,14 @@ bool CNPC_PlayerCompanion::IsMortar( CBaseEntity *pEntity )
 //-----------------------------------------------------------------------------
 bool CNPC_PlayerCompanion::IsSniper( CBaseEntity *pEntity )
 {
+#if !defined(PORTAL_DLL)
 	if ( !pEntity )
 		return false;
+
 	return ( pEntity->Classify() == CLASS_PROTOSNIPER );
+#else
+	return false;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -2718,9 +2735,14 @@ bool CNPC_PlayerCompanion::IsTurret( CBaseEntity *pEntity )
 //-----------------------------------------------------------------------------
 bool CNPC_PlayerCompanion::IsGunship( CBaseEntity *pEntity )
 {
-	if( !pEntity )
+#if !defined(PORTAL_DLL)
+	if (!pEntity)
 		return false;
-	return (pEntity->Classify() == CLASS_COMBINE_GUNSHIP );
+
+	return (pEntity->Classify() == CLASS_COMBINE_GUNSHIP);
+#else
+	return false;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -2821,10 +2843,12 @@ bool CNPC_PlayerCompanion::IsValidMoveAwayDest( const Vector &vecDest )
 		return true;
 	}
 
+#ifndef PORTAL_DLL
 	if( GetEnemy()->Classify() != CLASS_PROTOSNIPER )
 	{
 		return true;
 	}
+#endif
 
 	if( IsCoverPosition( GetEnemy()->EyePosition(), vecDest + GetViewOffset() ) )
 	{
@@ -3037,7 +3061,9 @@ bool CNPC_PlayerCompanion::OnObstructionPreSteer( AILocalMoveGoal_t *pMoveGoal, 
 			   IsCurSchedule( SCHED_GET_HEALTHKIT ) || 
 			   pBlocker->IsCurSchedule( SCHED_FAIL ) || 
 			   ( IsInPlayerSquad() && !pBlocker->IsInPlayerSquad() ) ||
+#ifndef PORTAL_DLL
 			   Classify() == CLASS_PLAYER_ALLY_VITAL ||
+#endif
 			   IsInAScript() ) )
 
 		{
@@ -3099,7 +3125,12 @@ void CNPC_PlayerCompanion::InputOutsideTransition( inputdata_t &inputdata )
 	const Vector &playerPos = pPlayer->GetAbsOrigin();
 
 	// Mark us as already having succeeded if we're vital or always meant to come with the player
+#ifndef PORTAL_DLL
 	bool bAlwaysTransition = ( ( Classify() == CLASS_PLAYER_ALLY_VITAL ) || m_bAlwaysTransition );
+#else
+	bool bAlwaysTransition = m_bAlwaysTransition;
+#endif
+
 	bool bPathToPlayer = bAlwaysTransition;
 
 	if ( bAlwaysTransition == false )
@@ -3512,14 +3543,14 @@ void CNPC_PlayerCompanion::InputGiveWeapon( inputdata_t &inputdata )
 	string_t iszWeaponName = inputdata.value.StringID();
 	if ( iszWeaponName != NULL_STRING )
 	{
+#ifndef PORTAL_DLL
 		if( Classify() == CLASS_PLAYER_ALLY_VITAL )
 		{
 			m_iszPendingWeapon = iszWeaponName;
 		}
 		else
-		{
-			GiveWeapon( iszWeaponName );
-		}
+#endif
+		GiveWeapon( iszWeaponName );
 	}
 }
 
@@ -3665,7 +3696,8 @@ bool CNPC_PlayerCompanion::IsNavigationUrgent( void )
 	bool bBase = BaseClass::IsNavigationUrgent();
 
 	// Consider follow & assault behaviour urgent
-	if ( !bBase && (m_FollowBehavior.IsActive() || ( m_AssaultBehavior.IsRunning() && m_AssaultBehavior.IsUrgent() )) && Classify() == CLASS_PLAYER_ALLY_VITAL ) 
+#ifndef PORTAL_DLL
+	if ( !bBase && (m_FollowBehavior.IsActive() || ( m_AssaultBehavior.IsRunning() && m_AssaultBehavior.IsUrgent() )) && Classify() == CLASS_PLAYER_ALLY_VITAL )
 	{
 		// But only if the blocker isn't the player, and isn't a physics object that's still moving
 		CBaseEntity *pBlocker = GetNavigator()->GetBlockingEntity();
@@ -3690,6 +3722,7 @@ bool CNPC_PlayerCompanion::IsNavigationUrgent( void )
 
 		return true;
 	}
+#endif
 
 	return bBase;
 }

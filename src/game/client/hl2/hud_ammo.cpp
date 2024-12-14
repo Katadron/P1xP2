@@ -53,7 +53,9 @@ private:
 	CHudTexture *m_iconPrimaryAmmo;
 };
 
+#if defined(PORTAL_DLL)
 DECLARE_HUDELEMENT( CHudAmmo );
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor

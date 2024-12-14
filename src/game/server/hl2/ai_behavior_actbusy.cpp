@@ -804,6 +804,7 @@ void CAI_ActBusyBehavior::GatherConditions( void )
 				SetCondition( COND_ACTBUSY_LOST_SEE_ENTITY );
 				m_hActBusyGoal->NPCLostSeeEntity( GetOuter() );
 
+#ifndef PORTAL_DLL
 				if( IsCombatActBusy() && (GetOuter()->Classify() == CLASS_PLAYER_ALLY_VITAL && m_hSeeEntity->IsPlayer()) )
 				{
 					// Defer any actbusying for several seconds. This serves as a heuristic for waiting
@@ -811,6 +812,7 @@ void CAI_ActBusyBehavior::GatherConditions( void )
 					// pertinent Actbusy near the player's new location.
 					m_flDeferUntil = gpGlobals->curtime + 4.0f;
 				}
+#endif
 			}
 		}
 	}

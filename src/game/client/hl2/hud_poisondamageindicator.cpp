@@ -53,7 +53,9 @@ private:
 	bool m_bDamageIndicatorVisible;
 };
 
+#if !defined(PORTAL_DLL)
 DECLARE_HUDELEMENT( CHudPoisonDamageIndicator );
+#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Constructor

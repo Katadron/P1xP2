@@ -25,8 +25,6 @@
 #include "iclientvehicle.h"
 #include "engine/ivdebugoverlay.h"
 #include "particles_localspace.h"
-#include "dlight.h"
-#include "iefx.h"
 #include "c_te_effect_dispatch.h"
 #include "tier0/vprof.h"
 #include "clienteffectprecachesystem.h"

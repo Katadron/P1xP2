@@ -2313,8 +2313,8 @@ bool CSceneEntity::CheckActors()
 					{
 						bShouldWait = true;
 					}
-					
-#ifdef HL2_EPISODIC
+#ifdef PORTAL_DLL
+#elif defined(HL2_EPISODIC)
 					// HACK: Alyx cannot play scenes when she's in the middle of transitioning					
 					if ( pActor->IsInAVehicle() )
 					{

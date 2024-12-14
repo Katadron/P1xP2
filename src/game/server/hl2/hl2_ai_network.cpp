@@ -19,7 +19,9 @@ class CHL2NetworkBuildHelper : public CAI_NetworkBuildHelper
 
 	void PostInitNodePosition( CAI_Network *pNetwork, CAI_Node *pNode )
 	{
+#ifndef PORTAL_DLL
 		AdjustStriderNodePosition( pNetwork, pNode );
+#endif
 	}
 };
 

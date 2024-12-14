@@ -34,11 +34,7 @@ public:
 	CMissile();
 	~CMissile();
 
-#ifdef HL1_DLL
-	Class_T Classify( void ) { return CLASS_NONE; }
-#else
 	Class_T Classify( void ) { return CLASS_MISSILE; }
-#endif
 	
 	void	Spawn( void );
 	void	Precache( void );
@@ -127,7 +123,9 @@ public:
 	void	AugerDelay( float flDelayTime );
 	void	ExplodeDelay( float flDelayTime );
 	void	DisableGuiding();
-#if defined( HL2_DLL )
+#ifdef PORTAL_DLL
+	virtual Class_T Classify(void) { return CLASS_NONE; }
+#elif defined(HL2_DLL)
 	virtual Class_T Classify ( void ) { return CLASS_COMBINE; }
 #endif
 

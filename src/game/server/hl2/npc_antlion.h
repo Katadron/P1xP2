@@ -125,8 +125,10 @@ public:
 	virtual int		GetSoundInterests( void ) { return (BaseClass::GetSoundInterests())|(SOUND_DANGER|SOUND_PHYSICS_DANGER|SOUND_THUMPER|SOUND_BUGBAIT); }
 	virtual	bool	IsHeavyDamage( const CTakeDamageInfo &info );
 
+#ifndef PORTAL_DLL
 	Class_T		Classify( void ) { return CLASS_ANTLION; }
-	
+#endif
+
 	void		Event_Killed( const CTakeDamageInfo &info );
 	bool		FValidateHintType ( CAI_Hint *pHint );
 	void		GatherEnemyConditions( CBaseEntity *pEnemy );

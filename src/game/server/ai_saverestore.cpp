@@ -167,7 +167,8 @@ public:
 
 	void PostRestore( void )
 	{
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 		// We need this list to be regenerated
 		OverrideMoveCache_ForceRepopulateList();
 #endif // HL2_DLL

@@ -53,7 +53,7 @@ private:
 
 using namespace vgui;
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 DECLARE_HUDELEMENT( CHudFlashlight );
 #endif // HL2_EPISODIC
 
@@ -104,7 +104,7 @@ void CHudFlashlight::SetFlashlightState( bool flashlightOn )
 //-----------------------------------------------------------------------------
 void CHudFlashlight::Paint()
 {
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 	C_BaseHLPlayer *pPlayer = (C_BaseHLPlayer *)C_BasePlayer::GetLocalPlayer();
 	if ( !pPlayer )
 		return;

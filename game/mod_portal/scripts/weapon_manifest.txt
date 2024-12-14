@@ -1,0 +1,6 @@
+weapon_manifest
+{
+	"file"		"scripts/weapon_cubemap.txt"
+	"file"		"scripts/weapon_physcannon.txt"
+	"file"		"scripts/weapon_physgun.txt"
+}

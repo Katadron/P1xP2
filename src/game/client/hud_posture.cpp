@@ -37,33 +37,9 @@ class CHudPosture : public CHudElement, public vgui::Panel
 public:
 	CHudPosture( const char *pElementName );
 	bool			ShouldDraw( void );
-
-#ifdef _X360 	// if not xbox 360, don't waste code space on this
-	virtual void	Init( void );
-	virtual void	Reset( void );
-	virtual void	OnTick( void );
-
-protected:
-	virtual void	Paint();
-
-	float	m_duckTimeout; /// HUD_POSTURE_FADE_TIME after the last known time the player was ducking
-
-private:
-
-	CPanelAnimationVar( vgui::HFont, m_hFont, "Font", "WeaponIconsSmall" );
-	CPanelAnimationVarAliasType( float, m_IconX, "icon_xpos", "4", "proportional_float" );
-	CPanelAnimationVarAliasType( float, m_IconY, "icon_ypos", "4", "proportional_float" );
-
-	enum { NOT_FADING, 
-		   FADING_UP, 
-		   FADING_DOWN
-	} m_kIsFading;
-#endif
-};	
-
+};
 
 DECLARE_HUDELEMENT( CHudPosture );
-
 
 namespace
 {

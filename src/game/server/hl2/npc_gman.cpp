@@ -59,10 +59,8 @@ END_DATADESC()
 //-----------------------------------------------------------------------------
 Class_T	CNPC_GMan::Classify ( void )
 {
-	return CLASS_PLAYER_ALLY_VITAL;
+	return CLASS_PLAYER_ALLY;
 }
-
-
 
 //-----------------------------------------------------------------------------
 // HandleAnimEvent - catches the NPC-specific messages

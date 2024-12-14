@@ -79,7 +79,7 @@ ConVar func_breakdmg_explosive( "func_breakdmg_explosive", "1.25" );
 
 ConVar sv_turbophysics( "sv_turbophysics", "0", FCVAR_REPLICATED, "Turns on turbo physics" );
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 	#define PROP_FLARE_LIFETIME 30.0f
 	#define PROP_FLARE_IGNITE_SUBSTRACT 5.0f
 	CBaseEntity *CreateFlare( Vector vOrigin, QAngle Angles, CBaseEntity *pOwner, float flDuration );
@@ -499,7 +499,8 @@ void CBreakableProp::HandleFirstCollisionInteractions( int index, gamevcollision
 
 		if ( tr.m_pEnt )
 		{
-#ifdef HL2_DLL
+#ifdef PORTAL_DLL
+#elif defined(HL2_DLL)
 			// Don't paintsplat friendlies
 			int iClassify = tr.m_pEnt->Classify();
 			if ( iClassify != CLASS_PLAYER_ALLY_VITAL && iClassify != CLASS_PLAYER_ALLY && 
@@ -1008,7 +1009,7 @@ void CBreakableProp::BreakablePropTouch( CBaseEntity *pOther )
 		}
 	}
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 	if ( m_hFlareEnt )
 	{
 		CAI_BaseNPC *pNPC = pOther->MyNPCPointer();
@@ -1445,17 +1446,17 @@ void CBreakableProp::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t
 		PlayPuntSound(); 
 	}
 
-	if ( IsX360() )
-	{
-		if( reason != PUNTED_BY_CANNON && (pPhysGunUser->m_nNumCrateHudHints < NUM_SUPPLY_CRATE_HUD_HINTS) )
-		{
-			if( FClassnameIs( this, "item_item_crate") )
-			{
-				pPhysGunUser->m_nNumCrateHudHints++;
-				UTIL_HudHintText( pPhysGunUser, "#Valve_Hint_Hold_ItemCrate" );
-			}
-		}
-	}
+	//if ( IsX360() )
+	//{
+	//	if( reason != PUNTED_BY_CANNON && (pPhysGunUser->m_nNumCrateHudHints < NUM_SUPPLY_CRATE_HUD_HINTS) )
+	//	{
+	//		if( FClassnameIs( this, "item_item_crate") )
+	//		{
+	//			pPhysGunUser->m_nNumCrateHudHints++;
+	//			UTIL_HudHintText( pPhysGunUser, "#Valve_Hint_Hold_ItemCrate" );
+	//		}
+	//	}
+	//}
 
 	SetPhysicsAttacker( pPhysGunUser, gpGlobals->curtime );
 
@@ -1463,7 +1464,7 @@ void CBreakableProp::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t
 	m_bOriginalBlockLOS = BlocksLOS();
 	SetBlocksLOS( false );
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 	if ( HasInteraction( PROPINTER_PHYSGUN_CREATE_FLARE ) )
 	{
 		CreateFlare( PROP_FLARE_LIFETIME );
@@ -1472,7 +1473,7 @@ void CBreakableProp::OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t
 }
 
 
-#ifdef HL2_EPISODIC
+#if defined(HL2_EPISODIC) && !defined(PORTAL_DLL)
 //-----------------------------------------------------------------------------
 // Purpose: Create a flare at the attachment point
 //-----------------------------------------------------------------------------

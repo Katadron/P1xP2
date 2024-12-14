@@ -945,9 +945,11 @@ float CGrabController::GetSavedMass( IPhysicsObject *pObject )
 //-----------------------------------------------------------------------------
 bool CGrabController::IsObjectAllowedOverhead( CBaseEntity *pEntity )
 {
+#ifndef PORTAL_DLL
 	// Allow combine balls overhead 
 	if( UTIL_IsCombineBallDefinite(pEntity) )
 		return true;
+#endif
 
 	// Allow props that are specifically flagged as such
 	CPhysicsProp *pPhysProp = dynamic_cast<CPhysicsProp *>(pEntity);
@@ -1804,6 +1806,7 @@ void CWeaponPhysCannon::Physgun_OnPhysGunPickup( CBaseEntity *pEntity, CBasePlay
 		RecordThrownObject( pEntity );
 	}
 
+#ifndef PORTAL_DLL
 	// Warn Alyx if the player is punting a car around.
 	if( hl2_episodic.GetBool() && mass > 250.0f )
 	{
@@ -1818,6 +1821,7 @@ void CWeaponPhysCannon::Physgun_OnPhysGunPickup( CBaseEntity *pEntity, CBasePlay
 			}
 		}
 	}
+#endif
 
 	Pickup_OnPhysGunPickup( pEntity, pOwner, reason );
 }
@@ -2216,6 +2220,7 @@ void CWeaponPhysCannon::PrimaryAttack( void )
 			return;
 		}
 
+#ifndef PORTAL_DLL
 		if( GetOwner()->IsPlayer() && !IsMegaPhysCannon() )
 		{
 			// Don't let the player zap any NPC's except regular antlions and headcrabs.
@@ -2225,6 +2230,7 @@ void CWeaponPhysCannon::PrimaryAttack( void )
 				return;
 			}
 		}
+#endif
 
 		if ( IsMegaPhysCannon() )
 		{
